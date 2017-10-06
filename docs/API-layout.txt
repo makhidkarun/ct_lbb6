@@ -23,13 +23,13 @@ API layout
              /<star>/orbit/<orbit>/planet/
              /<star>/orbit/<orbit>/planet/<uwp>     # Returns basic planet data below
                                          /<uwp>/temperature
-                                         /<uwp>/trade_codes
+                                         /<uwp>/trade_classifications
                                          /<uwp>/cloudiness
                                          /<uwp>/albedo
 
 
 /ct-lbb6/planet/
                /<uwp>   # Returns basic planet data below
-               /<uwp>/trade_codes
+               /<uwp>/trade_classifications
                /<uwp>/cloudiness
                /<uwp>/albedo
