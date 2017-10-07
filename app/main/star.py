@@ -5,7 +5,7 @@ import logging
 from ..models import StarTable, OrbitTable
 
 LOGGER = logging.getLogger(__name__)
-# LOGGER.setLevel(logging.ERROR)
+LOGGER.setLevel(logging.ERROR)
 
 
 class Star(object):

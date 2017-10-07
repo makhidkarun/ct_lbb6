@@ -7,7 +7,7 @@ from app.main.star import Star
 from app.main.orbit import Orbit
 
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
+# LOGGER.setLevel(logging.DEBUG)
 
 
 class TestOrbit(unittest.TestCase):

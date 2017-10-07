@@ -15,7 +15,6 @@ logging.basicConfig(
     format='%(relativeCreated)d %(name)s %(funcName)s(): %(message)s',
     level=logging.INFO
 )
-LOGGER.setLevel(logging.DEBUG)
 
 
 def create_app(config_name):

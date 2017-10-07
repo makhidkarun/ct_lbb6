@@ -5,7 +5,7 @@ import logging
 from app.main.star import Star
 
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
+# LOGGER.setLevel(logging.DEBUG)
 
 
 class TestStar(unittest.TestCase):
