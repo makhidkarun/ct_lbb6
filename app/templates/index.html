@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}LBB6{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>LBB6 Star/Orbit/Planet Information</h1>
+</div>
+<div class="body">
+    <h2>Star/Orbit/Planet details</h2>
+    {{ wtf.quick_form(form) }}
+
+    {% if star.classification  %}
+    <h3>Star {{ star.classification }}</h3>
+    <table>
+        <tr>
+            <th>Magnitude</th><td>{{ star.magnitude }}</td>
+        </tr>
+        <tr>
+            <th>Luminosity</th><td>{{ star.luminosity }}</td>
+        </tr>
+        <tr>
+            <th>Temperature</th><td>{{ star.temperature }} K</td>
+        </tr>
+        <tr>
+            <th>Radius</th><td>{{ star.radius }} (xSun)</td>
+        </tr>
+        <tr>
+            <th>Mass</th><td>{{ star.mass }} (xSun)</td>
+        </tr>
+        <tr>
+            <th>Minimum orbit</th><td>{{ star.min_orbit }}</td>
+        </tr>
+        {% if star.hz_orbit %}
+        <tr>
+            <th>Habitable zone orbit</th><td>{{ star.hz_orbit }}</td>
+        </tr>
+        <tr>
+            <th>Habitable zone period</th><td>{{ star.hz_period }}</td>
+        </tr>
+        {% endif %}
+    </table>
+    {% if orbit.orbit_no %}
+    <h3>Orbit {{ orbit.orbit_no }}</h3>
+    <table>
+        <tr>
+            <th>Orbital radius (AU)</th><td>{{ orbit.au }}</td>
+        </tr>
+        <tr>
+            <th>Orbital radius (Mkm)</th><td>{{ orbit.mkm }}</td>
+        </tr>
+        <tr>
+            <th>Orbital period (y)</th><td>{{ orbit.period }}</td>
+        </tr>
+        <tr>
+            <th>Angular diameter of star (deg)</th><td>{{ orbit.angular_dia_deg }}</td>
+        </tr>
+        <tr>
+            <th>Angular diameter of star (xSun)</th><td>{{ orbit.angular_dia_sun }}</td>
+        </tr>
+    </table>
+    {% endif %}
+    {% if planet.uwp %}
+    <h3>Planet {{ planet.uwp }}</h3>
+    <table>
+        <tr>
+            <th>UWP</th><td>{{ planet.uwp }}</td>
+        </tr>
+        <tr>
+            <th>Cloudiness</th><td>{{ planet.cloudiness }}</td>
+        </tr>
+        <tr>
+            <th>Albedo</th><td>{{ planet.albedo['min'] }} - {{ planet.albedo['max'] }}</td>
+        </tr>
+        <tr>
+            <th>Temperature</th>
+            <td>{{ planet.temperature['min'] }} K - {{ planet.temperature['max'] }} K</td>
+        </tr>
+        <tr>
+            <th>Trade Classifications</th>
+            <td>
+                {% for c in planet.trade_classifications %}
+                {{ c }}
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+    {% endif %}
+
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}
