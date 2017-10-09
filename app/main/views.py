@@ -15,7 +15,7 @@ LOGGER.setLevel(logging.ERROR)
 def index():
     '''Index page'''
     star = Star('')
-    orbit = Orbit(star)
+    orbit = Orbit(star, None)
     planet = Planet(None, orbit, star)
     form = Lbb6Form()
     LOGGER.debug('star data = %s', form.star.data)
@@ -24,7 +24,7 @@ def index():
     if form.validate_on_submit:
         LOGGER.debug('form validated')
         star = Star(form.star.data)
-        if form.orbit.data:
+        if form.orbit.data is not None:
             orbit = Orbit(star, form.orbit.data)
         if form.planet.data:
             planet = Planet(form.planet.data, orbit=orbit, star=star)
