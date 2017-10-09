@@ -22,17 +22,20 @@ class Star(object):
         self.radius = 0
         self.mass = 0
         self.hz_period = None
+        self.classification = None
         self._validate_code(code)
+        self.get_classification()
         self.get_details()
         self.calculate_hz_period()
 
     def _validate_code(self, code):
         '''Validate code -> type, decimal, size'''
         LOGGER.debug('code = %s', code)
-        if code.endswith('D'):
-            self._validate_code_dwarf(code)
-        else:
-            self._validate_code_star(code)
+        if code:
+            if code.endswith('D'):
+                self._validate_code_dwarf(code)
+            else:
+                self._validate_code_star(code)
 
     def _validate_code_star(self, code):
         '''Validate code for non-dwarf'''
@@ -76,6 +79,7 @@ class Star(object):
         if mtch:
             LOGGER.debug('code matches RE')
             self.type = mtch.group(1)
+            self.decimal = ''
             self.size = 'D'
 
     def get_details(self):
@@ -108,3 +112,8 @@ class Star(object):
             LOGGER.debug('orbit = %s', orbit)
             self.hz_period = (orbit.au ** 3 / self.mass) ** 0.5
             LOGGER.debug('hz_period = %s', self.hz_period)
+
+    def get_classification(self):
+        '''Write canonical classification'''
+        self.classification = '{0}{1} {2}'.format(
+            self.type, self.decimal, self.size)

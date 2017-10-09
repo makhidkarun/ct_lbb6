@@ -37,7 +37,7 @@
             <th>Habitable zone orbit</th><td>{{ star.hz_orbit }}</td>
         </tr>
         <tr>
-            <th>Habitable zone period</th><td>{{ star.hz_period }}</td>
+            <th>Habitable zone period</th><td>{{ star.hz_period }} std years</td>
         </tr>
         {% endif %}
     </table>
@@ -45,19 +45,16 @@
     <h3>Orbit {{ orbit.orbit_no }}</h3>
     <table>
         <tr>
-            <th>Orbital radius (AU)</th><td>{{ orbit.au }}</td>
+            <th>Orbital radius</th><td>{{ orbit.au }} AU<br>{{ orbit.mkm }} Mkm</td>
         </tr>
         <tr>
-            <th>Orbital radius (Mkm)</th><td>{{ orbit.mkm }}</td>
+            <th>Orbital period</th><td>{{ orbit.period }} std years</td>
         </tr>
         <tr>
-            <th>Orbital period (y)</th><td>{{ orbit.period }}</td>
+            <th>Angular diameter of star</th><td>{{ orbit.angular_dia_deg }} degrees</td>
         </tr>
         <tr>
-            <th>Angular diameter of star (deg)</th><td>{{ orbit.angular_dia_deg }}</td>
-        </tr>
-        <tr>
-            <th>Angular diameter of star (xSun)</th><td>{{ orbit.angular_dia_sun }}</td>
+            <th>Angular diameter of star</th><td>{{ orbit.angular_dia_sun }} (xSun)</td>
         </tr>
     </table>
     {% endif %}

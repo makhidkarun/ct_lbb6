@@ -6,7 +6,7 @@ from random import seed, randint
 from ehex.ehex import ehex
 
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
+LOGGER.setLevel(logging.ERROR)
 
 
 class Planet(object):
@@ -29,6 +29,10 @@ class Planet(object):
         self.orbit = orbit
         self.star = star
 
+        for field in ['min', 'max']:
+            self.albedo[field] = None
+            self.temperature[field] = None
+
         self.process_uwp(uwp)
         self.determine_trade_classifications()
         self.determine_cloudiness()
@@ -39,17 +43,18 @@ class Planet(object):
         '''Process UWP, populate variables'''
         re_uwp = r'([A-HYX])([0-9AS])([0-9A-F])([0-9A])([0-9A])' +\
             r'([0-9A-F])([0-9A-HJ-NP-Z)])\-([0-9A-HJ-NP-Z)])'
-        mtch = re.match(re_uwp, uwp)
-        if mtch:
-            self.uwp = uwp
-            self.starport = mtch.group(1)
-            self.size = ehex(mtch.group(2))
-            self.atmosphere = ehex(mtch.group(3))
-            self.hydrographics = ehex(mtch.group(4))
-            self.population = ehex(mtch.group(5))
-            self.government = ehex(mtch.group(6))
-            self.lawlevel = ehex(mtch.group(7))
-            self.techlevel = ehex(mtch.group(8))
+        if uwp:
+            mtch = re.match(re_uwp, str(uwp))
+            if mtch:
+                self.uwp = uwp
+                self.starport = mtch.group(1)
+                self.size = ehex(mtch.group(2))
+                self.atmosphere = ehex(mtch.group(3))
+                self.hydrographics = ehex(mtch.group(4))
+                self.population = ehex(mtch.group(5))
+                self.government = ehex(mtch.group(6))
+                self.lawlevel = ehex(mtch.group(7))
+                self.techlevel = ehex(mtch.group(8))
 
     def determine_trade_classifications(self):
         '''Determine trade classifications'''

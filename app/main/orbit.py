@@ -5,7 +5,7 @@ from math import atan2, pi
 from ..models import OrbitTable
 
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
+LOGGER.setLevel(logging.ERROR)
 
 
 class Orbit(object):
@@ -50,8 +50,9 @@ class Orbit(object):
         '''Get orbit radius from OrbitTable'''
         if orbit_no:
             details = OrbitTable.query.\
-                filter_by(indx=self.orbit_no).\
+                filter_by(indx=orbit_no).\
                 first()
+
             LOGGER.debug('orbit details = %s', details)
             if details:
                 self.orbit_no = orbit_no
