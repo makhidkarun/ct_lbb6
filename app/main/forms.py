@@ -2,7 +2,7 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField
-from wtforms.validators import Required, Optional, Regexp
+from wtforms.validators import Required, Optional, Regexp, NumberRange
 
 UWP_REGEXP = r'^[A-HYX][0-9A-HJ-NP-Z]{6}\-[0-9A-HJ-NP-Z]$'
 STAR_REGEXP = r'([BAFGKM])([0-9])\s*([IVDab]{1,2}$)|[BAFGKM]\s*D$'
@@ -13,7 +13,14 @@ class Lbb6Form(FlaskForm):
     star = StringField(
         'Star code',
         validators=[Required(), Regexp(STAR_REGEXP)])
-    orbit = IntegerField('Orbit number', validators=[Optional()])
+    orbit = IntegerField(
+        'Orbit number',
+        validators=[
+            Optional(),
+            NumberRange(
+                0,
+                19,
+                'Orbit no between 0 and 19')])
     planet = StringField(
         'Planet UWP',
         validators=[Optional(), Regexp(UWP_REGEXP)])
