@@ -6,7 +6,6 @@ import app.api_1_0.star as Api
 from flask import jsonify
 
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.ERROR)
 
 
 class TestStarAPI(unittest.TestCase):
@@ -18,13 +17,13 @@ class TestStarAPI(unittest.TestCase):
             'decimal': 2,
             'size': 'IV',
             'min_orbit': 0,
-            'hz_orbit': 4,
-            'magnitude': 2.59,
-            'luminosity': 5.46573,
-            'temperature': 4430,
-            'radius': 4.02,
-            'mass': 2.1,
-            'hz_period': 1.3965944975103515
+            'hz_orbit': 5,
+            'magnitude': 2.34,
+            'luminosity': 6.802,
+            'temperature': 4276,
+            'radius': 6.7,
+            'mass': 2.98,
+            'hz_period': 2.714
         })
         received = Api.get_star('K2IV')
         self.assertTrue(expected.data == received.data)
@@ -46,8 +45,9 @@ class TestStarAPI(unittest.TestCase):
 
     def test_get_decimal_dwarf(self):
         '''API: Star - test get_decimal() for dwarf'''
-        expected = jsonify({'decimal': None})
+        expected = jsonify({'decimal': ''})
         received = Api.get_decimal('KD')
+        LOGGER.debug('Received %s', received.data)
         self.assertTrue(expected.data == received.data)
         self.assertTrue(received.status_code == 200)
 
@@ -102,14 +102,14 @@ class TestStarAPI(unittest.TestCase):
 
     def test_get_mass(self):
         '''API: Star - test get_mass()'''
-        expected = jsonify({'mass': 1.46})
+        expected = jsonify({'mass': 1.14})
         received = Api.get_mass('F8V')
         self.assertTrue(expected.data == received.data)
         self.assertTrue(received.status_code == 200)
 
     def test_get_hz_period(self):
         '''API: Star - test get_hz_period()'''
-        expected = jsonify({'hz_period': 7.88770747451627})
+        expected = jsonify({'hz_period': 8.513})
         received = Api.get_hz_period('A7V')
         self.assertTrue(expected.data == received.data)
         self.assertTrue(received.status_code == 200)

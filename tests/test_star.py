@@ -55,21 +55,21 @@ class TestStar(unittest.TestCase):
         star = Star('G D')
         self.assertTrue(star.type == 'G')
         self.assertTrue(star.size == 'D')
-        self.assertTrue(star.decimal is None)
+        self.assertTrue(star.decimal == '')
 
     def test_validate_d_without_space(self):
         '''Star - test valiation: dwarf (code =" GD")'''
         star = Star('GD')
         self.assertTrue(star.type == 'G')
         self.assertTrue(star.size == 'D')
-        self.assertTrue(star.decimal is None)
+        self.assertTrue(star.decimal == '')
 
     def test_get_details(self):
         '''Star - test get_details()'''
         star = Star('G2 V')
         self.assertTrue(star.min_orbit == 0)
         self.assertTrue(star.hz_orbit == 3)
-        self.assertTrue(star.magnitude == 4.822)
+        self.assertTrue(star.magnitude == 4.82)
         self.assertTrue(star.luminosity == 0.994)
         self.assertTrue(star.temperature == 5800)
         self.assertTrue(star.radius == 0.98)

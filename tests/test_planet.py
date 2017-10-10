@@ -48,7 +48,7 @@ class TestPlanet(unittest.TestCase):
     def test_albedo(self):
         '''Planet - test albedo calculation'''
         planet = Planet('A788899-A')
-        self.assertTrue(planet.albedo['min'] == 0.292568)
+        self.assertTrue(planet.albedo['min'] == 0.293)
         self.assertTrue(planet.albedo['max'] == 0.586)
 
     def test_albedo_de(self):
@@ -60,13 +60,13 @@ class TestPlanet(unittest.TestCase):
     def test_albedo_ic(self):
         '''Planet - test albedo calculation - ice-capped world'''
         planet = Planet('C415000-0')
-        self.assertTrue(planet.albedo['min'] == 0.2175)
-        self.assertTrue(planet.albedo['max'] == 0.2175)
+        self.assertTrue(planet.albedo['min'] == 0.217)
+        self.assertTrue(planet.albedo['max'] == 0.217)
 
     def test_temperature(self):
         '''Planet - test temperature calculation'''
         star = Star('F7V')
         orbit = Orbit(star, 4)
         planet = Planet('A788899-A', orbit=orbit, star=star)
-        self.assertAlmostEquals(planet.temperature['max'], 348.7, 1)
-        self.assertAlmostEquals(planet.temperature['min'], 204.1, 1)
+        self.assertAlmostEquals(planet.temperature['max'], 304.8, 1)
+        self.assertAlmostEquals(planet.temperature['min'], 178.5, 1)

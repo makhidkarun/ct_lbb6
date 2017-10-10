@@ -80,6 +80,7 @@ class Star(object):
         if mtch:
             LOGGER.debug('code matches RE')
             self.type = mtch.group(1)
+            self.decimal = ''
             self.size = 'D'
 
     def get_details(self):
