@@ -5,7 +5,7 @@ import logging
 from ..models import StarTable, OrbitTable
 
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.ERROR)
+LOGGER.setLevel(logging.DEBUG)
 
 
 class Star(object):
@@ -16,6 +16,7 @@ class Star(object):
         self.size = None
         self.min_orbit = 0
         self.hz_orbit = None
+        self.int_orbit = None
         self.magnitude = 0
         self.luminosity = 0
         self.temperature = 0
@@ -89,11 +90,17 @@ class Star(object):
             self.type,
             self.size,
             self.decimal)
-        details = StarTable.query.\
-            filter_by(typ=self.type).\
-            filter_by(size=self.size).\
-            filter_by(decimal=self.decimal).\
-            first()
+        if self.size == 'D':
+            details = StarTable.query.\
+                filter_by(typ=self.type).\
+                filter_by(size=self.size).\
+                first()
+        else:
+            details = StarTable.query.\
+                filter_by(typ=self.type).\
+                filter_by(size=self.size).\
+                filter_by(decimal=self.decimal).\
+                first()
         LOGGER.debug('star = %s', details)
         if details:
             self.min_orbit = details.min_orbit
@@ -103,6 +110,7 @@ class Star(object):
             self.temperature = details.temperature
             self.radius = details.radius
             self.mass = details.mass
+            self.int_orbit = details.int_orbit
 
     def calculate_hz_period(self):
         '''Calculate period of planet in HZ orbit'''
@@ -110,10 +118,11 @@ class Star(object):
             orbit = OrbitTable.query.\
                 filter_by(indx=self.hz_orbit).first()
             LOGGER.debug('orbit = %s', orbit)
-            self.hz_period = (orbit.au ** 3 / self.mass) ** 0.5
+            self.hz_period = round((orbit.au ** 3 / self.mass) ** 0.5, 3)
             LOGGER.debug('hz_period = %s', self.hz_period)
 
     def get_classification(self):
         '''Write canonical classification'''
-        self.classification = '{0}{1} {2}'.format(
-            self.type, self.decimal, self.size)
+        if self.type:
+            self.classification = '{0}{1} {2}'.format(
+                self.type, self.decimal, self.size)

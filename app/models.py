@@ -15,6 +15,7 @@ class StarTable(db.Model):
 
     min_orbit = db.Column(db.Integer, default=0)
     hz_orbit = db.Column(db.Integer)
+    int_orbit = db.Column(db.Integer)
     magnitude = db.Column(db.Float)
     luminosity = db.Column(db.Float)
     temperature = db.Column(db.Integer)
@@ -23,7 +24,8 @@ class StarTable(db.Model):
 
     def __repr__(self):
         fmt_string = '<Star(typ={0} decimal={1} size={2} min_orbit={3} '
-        fmt_string += 'hz_orbit={4} magnitude={5} luminosity={6} '
+        fmt_string += 'hz_orbit={4} int_orbit={10} magnitude={5} '
+        fmt_string += 'luminosity={6} '
         fmt_string += 'temperature={7} radius={8} mass={9})>'
         return fmt_string.format(
             self.typ,
@@ -35,7 +37,8 @@ class StarTable(db.Model):
             self.luminosity,
             self.temperature,
             self.radius,
-            self.mass)
+            self.mass,
+            self.int_orbit)
 
 
 class OrbitTable(db.Model):

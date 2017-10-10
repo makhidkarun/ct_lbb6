@@ -41,20 +41,18 @@
         </tr>
         {% endif %}
     </table>
-    {% if orbit.orbit_no %}
+    {% if orbit.au %}
     <h3>Orbit {{ orbit.orbit_no }}</h3>
     <table>
         <tr>
-            <th>Orbital radius</th><td>{{ orbit.au }} AU<br>{{ orbit.mkm }} Mkm</td>
+            <th valign="top">Orbital radius</th><td>{{ orbit.au }} AU<br>{{ orbit.mkm }} Mkm</td>
         </tr>
         <tr>
             <th>Orbital period</th><td>{{ orbit.period }} std years</td>
         </tr>
         <tr>
-            <th>Angular diameter of star</th><td>{{ orbit.angular_dia_deg }} degrees</td>
-        </tr>
-        <tr>
-            <th>Angular diameter of star</th><td>{{ orbit.angular_dia_sun }} (xSun)</td>
+            <th valign="top">Angular diameter of star</th>
+            <td>{{ orbit.angular_dia_deg }} degrees<br>{{ orbit.angular_dia_sun }} (xSun)</td>
         </tr>
     </table>
     {% endif %}

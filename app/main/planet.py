@@ -167,8 +167,8 @@ class Planet(object):
                 albedo = (int(self.hydrographics) / 100.0) * 0.55
                 # Rock component
                 albedo += (1.0 - int(self.hydrographics) / 100.0) * 0.2
-                self.albedo['min'] = albedo
-                self.albedo['max'] = albedo
+                self.albedo['min'] = round(albedo, 3)
+                self.albedo['max'] = round(albedo, 3)
             else:
                 '''
                 Other worlds - use min-max approach
@@ -187,13 +187,14 @@ class Planet(object):
                         )
                     )
                 '''
-                self.albedo['min'] = \
+                self.albedo['min'] = round(
                     self.cloudiness * 0.4 + (1 - self.cloudiness) * (
                         0.05 * 0.85 +
                         0.95 * (
                             int(self.hydrographics) / 100.0 * 0.02 +
                             (1 - int(self.hydrographics) / 100.0) * 0.1
-                        ))
+                        )),
+                    3)
                 '''
                 Maximum albedo =
                     %cloud * 0.8 +
@@ -205,13 +206,14 @@ class Planet(object):
                         )
                     )
                 '''
-                self.albedo['max'] = \
+                self.albedo['max'] = round(
                     self.cloudiness * 0.8 + (1 - self.cloudiness) * (
                         0.10 * 0.85 +
                         0.90 * (
                             int(self.hydrographics) / 100 * 0.02 +
                             (1 - int(self.hydrographics) / 100) * 0.2
-                        ))
+                        )),
+                    3)
             LOGGER.debug(
                 'Albedo (min, max) = (%s, %s)',
                 self.albedo['min'],
@@ -222,12 +224,16 @@ class Planet(object):
         if self.uwp and self.orbit and self.star:
             greenhouse = self._determine_greenhouse_effect()
             LOGGER.debug('Greenhouse effect = %s', greenhouse)
-            self.temperature['max'] = 374.025 * greenhouse * \
-                (1 - self.albedo['min']) *\
-                self.star.luminosity ** 0.25 / self.orbit.au ** 0.5
-            self.temperature['min'] = 374.025 * greenhouse * \
-                (1 - self.albedo['max']) *\
-                self.star.luminosity ** 0.25 / self.orbit.au ** 0.5
+            self.temperature['max'] = round(
+                374.025 * greenhouse *
+                (1 - self.albedo['min']) *
+                self.star.luminosity ** 0.25 / self.orbit.au ** 0.5,
+                3)
+            self.temperature['min'] = round(
+                374.025 * greenhouse *
+                (1 - self.albedo['max']) *
+                self.star.luminosity ** 0.25 / self.orbit.au ** 0.5,
+                3)
             LOGGER.debug(
                 'temperature = (%s, %s)',
                 self.temperature['min'],
