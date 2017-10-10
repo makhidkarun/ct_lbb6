@@ -6,7 +6,7 @@ from random import seed, randint
 from ehex.ehex import ehex
 
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.ERROR)
+# LOGGER.setLevel(logging.ERROR)
 
 
 class Planet(object):

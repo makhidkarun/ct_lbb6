@@ -8,7 +8,7 @@ from .star import Star
 from .orbit import Orbit
 from .planet import Planet
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
+# LOGGER.setLevel(logging.DEBUG)
 
 
 @main.route('/', methods=['GET', 'POST'])

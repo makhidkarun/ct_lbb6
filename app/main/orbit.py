@@ -5,7 +5,7 @@ from math import atan2, pi
 from ..models import OrbitTable
 
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
+# LOGGER.setLevel(logging.DEBUG)
 
 
 class Orbit(object):
