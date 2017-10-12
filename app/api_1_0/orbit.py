@@ -26,7 +26,7 @@ def return_orbit_basic_details(code, orbit_no):
     '''Return basic orbit details'''
     star = Star(code)
     orbit = Orbit(star, orbit_no)
-    if star and orbit:
+    if star and orbit is not None:
         return jsonify({
             'period': orbit.period,
             'angular_diameter_sun': orbit.angular_dia_sun,
@@ -42,8 +42,8 @@ def return_orbit_basic_details(code, orbit_no):
 def return_orbit_period(code, orbit_no):
     '''Return orbit period'''
     star = Star(code)
-    orbit = Orbit(orbit_no)
-    if star and orbit:
+    orbit = Orbit(star, orbit_no)
+    if star and orbit is not None:
         return jsonify({'period': orbit.period})
     else:
         return errors.bad_request()
@@ -53,8 +53,8 @@ def return_orbit_period(code, orbit_no):
 def return_orbit_angular_diameter(code, orbit_no):
     '''Return orbit angular_diameter'''
     star = Star(code)
-    orbit = Orbit(orbit_no)
-    if star and orbit:
+    orbit = Orbit(star, orbit_no)
+    if star and orbit is not None:
         return jsonify({
             'angular_diameter_deg': orbit.angular_dia_deg,
             'angular_diameter_sun': orbit.angular_dia_sun})
@@ -66,8 +66,8 @@ def return_orbit_angular_diameter(code, orbit_no):
 def return_orbit_radius(code, orbit_no):
     '''Return orbit radius'''
     star = Star(code)
-    orbit = Orbit(orbit_no)
-    if star and orbit:
+    orbit = Orbit(star, orbit_no)
+    if star and orbit is not None:
         return jsonify({
             'au': orbit.au,
             'mkm': orbit.mkm})

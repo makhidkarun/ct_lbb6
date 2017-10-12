@@ -3,123 +3,153 @@
 import unittest
 import logging
 import app.api_1_0.star as Api
-from flask import jsonify
+from flask import jsonify, url_for
+from app import create_app, db
 
 LOGGER = logging.getLogger(__name__)
 
 
 class TestStarAPI(unittest.TestCase):
     '''star API unit tests'''
-    def test_get_star(self):
-        '''API: Star - test get_star()'''
+    star_classification = 'G2V'
+    orbit_no = 3
+    planet_uwp = 'A788587-9'
+    api_headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+
+    def setUp(self):
+        '''Setup'''
+        self.app = create_app('testing')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        self.client = self.app.test_client()
+
+    def tearDown(self):
+        '''Teardown'''
+        db.session.remove()
+        self.app_context.pop()
+
+    def test_star(self):
+        '''Test /ct/lbb6/star/<classification>'''
+        response = self.client.get(
+            url_for('api.get_star', code=self.star_classification),
+            content_type='application/json')
         expected = jsonify({
-            'typ': 'K',
-            'decimal': 2,
-            'size': 'IV',
-            'min_orbit': 0,
-            'hz_orbit': 5,
-            'magnitude': 2.34,
-            'luminosity': 6.802,
-            'temperature': 4276,
-            'radius': 6.7,
-            'mass': 2.98,
-            'hz_period': 2.714
+            "decimal": 2,
+            "hz_orbit": 3,
+            "hz_period": 1.0,
+            "luminosity": 0.994,
+            "magnitude": 4.82,
+            "mass": 1.0,
+            "min_orbit": 0,
+            "radius": 0.98,
+            "size": "V",
+            "temperature": 5800,
+            "typ": "G"
         })
-        received = Api.get_star('K2IV')
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
-    def test_get_type(self):
-        '''API: Star - test get_type()'''
-        expected = jsonify({'typ': 'M'})
-        received = Api.get_type('M2II')
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
+    def test_star_type(self):
+        '''Test /<star>/type'''
+        response = self.client.get(
+            url_for('api.get_type', code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({"typ": "G"})
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
-    def test_get_decimal(self):
-        '''API: Star - test get_decimal()'''
-        expected = jsonify({'decimal': 3})
-        received = Api.get_decimal('K3V')
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
+    def test_star_decimal(self):
+        '''Test /<star>/decimal'''
+        response = self.client.get(
+            url_for('api.get_decimal', code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({"decimal": 2})
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
-    def test_get_decimal_dwarf(self):
-        '''API: Star - test get_decimal() for dwarf'''
-        expected = jsonify({'decimal': ''})
-        received = Api.get_decimal('KD')
-        LOGGER.debug('Received %s', received.data)
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
+    def test_size(self):
+        '''Test /<star>/size'''
+        response = self.client.get(
+            url_for('api.get_size', code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({"size": "V"})
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
-    def test_get_size(self):
-        '''API: Star - test get_size()'''
-        expected = jsonify({'size': 'V'})
-        received = Api.get_size('G2V')
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
+    def test_min_orbit(self):
+        '''Test /<star>/min_orbit'''
+        response = self.client.get(
+            url_for('api.get_min_orbit', code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({"min_orbit": 0})
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
-    def test_get_min_orbit(self):
-        '''API: Star - test get_min_orbit()'''
-        expected = jsonify({'min_orbit': 8})
-        received = Api.get_min_orbit('B0Ia')
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
+    def test_hz_orbit(self):
+        '''Test /<star>/hz_orbit'''
+        response = self.client.get(
+            url_for('api.get_hz_orbit', code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({"hz_orbit": 3})
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
-    def test_get_hz_orbit(self):
-        '''API: Star - test get_hz_orbit()'''
-        expected = jsonify({'hz_orbit': 13})
-        received = Api.get_hz_orbit('B0Ia')
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
+    def test_magnitude(self):
+        '''Test /<star>/magnitude'''
+        response = self.client.get(
+            url_for('api.get_magnitude', code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({"magnitude": 4.82})
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
-    def test_get_magnitude(self):
-        '''API: Star - test get_magnitude()'''
-        expected = jsonify({'magnitude': 7.4})
-        received = Api.get_magnitude('K5V')
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
+    def test_luminosity(self):
+        '''Test /<star>/luminosity'''
+        response = self.client.get(
+            url_for('api.get_luminosity', code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({"luminosity": 0.994})
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
-    def test_get_luminosity(self):
-        '''API: Star - test get_luminosity()'''
-        expected = jsonify({'luminosity': 5.22})
-        received = Api.get_luminosity('G4IV')
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
+    def test_temperature(self):
+        '''Test /<star>/temperature'''
+        response = self.client.get(
+            url_for('api.get_temperature', code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({"temperature": 5800})
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
-    def test_get_temperature(self):
-        '''API: Star - test get_temperature()'''
-        expected = jsonify({'temperature': 5340})
-        received = Api.get_temperature('G4IV')
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
+    def test_radius(self):
+        '''Test /<star>/radius'''
+        response = self.client.get(
+            url_for('api.get_radius', code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({"radius": 0.98})
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
-    def test_get_radius(self):
-        '''API: Star - test get_radius()'''
-        expected = jsonify({'radius': 2.74})
-        received = Api.get_radius('G4IV')
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
+    def test_mass(self):
+        '''Test <star>/mass'''
+        response = self.client.get(
+            url_for('api.get_mass', code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({"mass": 1.0})
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
-    def test_get_mass(self):
-        '''API: Star - test get_mass()'''
-        expected = jsonify({'mass': 1.14})
-        received = Api.get_mass('F8V')
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
-
-    def test_get_hz_period(self):
-        '''API: Star - test get_hz_period()'''
-        expected = jsonify({'hz_period': 8.513})
-        received = Api.get_hz_period('A7V')
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
-
-    def test_get_hz_period_dwarf(self):
-        '''API: Star - test get_hz_period() - dwarf'''
-        expected = jsonify({'hz_period': None})
-        received = Api.get_hz_period('MD')
-        self.assertTrue(expected.data == received.data)
-        self.assertTrue(received.status_code == 200)
+    def test_hz_period(self):
+        '''Test /<star>/hz_period'''
+        response = self.client.get(
+            url_for('api.get_hz_period', code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({"hz_period": 1.0})
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
 
 class TestStarAPIFail(unittest.TestCase):
@@ -129,74 +159,91 @@ class TestStarAPIFail(unittest.TestCase):
         'error': 'bad request',
         'message': 'Invalid star {}'.format(code)})
 
+    def setUp(self):
+        '''Setup'''
+        self.app = create_app('testing')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        self.client = self.app.test_client()
+
+    def tearDown(self):
+        '''Teardown'''
+        db.session.remove()
+        self.app_context.pop()
+
+    def api_query(self, endpoint):
+        '''Generic API query'''
+        return self.client.get(
+            url_for(endpoint, code=self.code))
+
     def test_get_star_fail(self):
-        '''API: Star - test get_star() - fail'''
-        received = Api.get_star(self.code)
+        '''Test /star/<code> - fail'''
+        received = self.api_query('api.get_star')
         self.assertTrue(self.expected.data == received.data)
         self.assertTrue(received.status_code == 400)
 
     def test_get_type_fail(self):
-        '''API: Star - test get_type() - fail'''
-        received = Api.get_type(self.code)
+        '''Test /star/<code>/type - fail'''
+        received = self.api_query('api.get_type')
         self.assertTrue(self.expected.data == received.data)
         self.assertTrue(received.status_code == 400)
 
     def test_get_decimal(self):
-        '''API: Star - test get_decimal()'''
-        received = Api.get_decimal(self.code)
+        '''Test /star/<code>/decimal - fail'''
+        received = self.api_query('api.get_decimal')
         self.assertTrue(self.expected.data == received.data)
         self.assertTrue(received.status_code == 400)
 
     def test_get_size(self):
-        '''API: Star - test get_size()'''
-        received = Api.get_size(self.code)
+        '''Test /star/<code>/size - fail'''
+        received = self.api_query('api.get_size')
         self.assertTrue(self.expected.data == received.data)
         self.assertTrue(received.status_code == 400)
 
     def test_get_min_orbit(self):
-        '''API: Star - test get_min_orbit()'''
-        received = Api.get_min_orbit(self.code)
+        '''Test /star/<code>/min_orbit - fail'''
+        received = self.api_query('api.get_min_orbit')
         self.assertTrue(self.expected.data == received.data)
         self.assertTrue(received.status_code == 400)
 
     def test_get_hz_orbit(self):
-        '''API: Star - test get_hz_orbit()'''
-        received = Api.get_hz_orbit(self.code)
+        '''Test /star/<code>/hz_orbit - fail'''
+        received = self.api_query('api.get_hz_orbit')
         self.assertTrue(self.expected.data == received.data)
         self.assertTrue(received.status_code == 400)
 
     def test_get_magnitude(self):
-        '''API: Star - test get_magnitude()'''
-        received = Api.get_magnitude(self.code)
+        '''Test /star/<code>/magnitude - fail'''
+        received = self.api_query('api.get_magnitude')
         self.assertTrue(self.expected.data == received.data)
         self.assertTrue(received.status_code == 400)
 
     def test_get_luminosity(self):
-        '''API: Star - test get_luminosity()'''
-        received = Api.get_luminosity(self.code)
+        '''Test /star/code/luminosity - fail'''
+        received = self.api_query('api.get_luminosity')
         self.assertTrue(self.expected.data == received.data)
         self.assertTrue(received.status_code == 400)
 
     def test_get_temperature(self):
-        '''API: Star - test get_temperature()'''
-        received = Api.get_temperature(self.code)
+        '''Test /star/<code>/temperature - fail'''
+        received = self.api_query('api.get_temperature')
         self.assertTrue(self.expected.data == received.data)
         self.assertTrue(received.status_code == 400)
 
     def test_get_radius(self):
-        '''API: Star - test get_radius()'''
-        received = Api.get_radius(self.code)
+        '''Test /star/<code>/radius - fail'''
+        received = self.api_query('api.get_radius')
         self.assertTrue(self.expected.data == received.data)
         self.assertTrue(received.status_code == 400)
 
     def test_get_mass(self):
-        '''API: Star - test get_mass()'''
-        received = Api.get_mass(self.code)
+        '''Test /star/<code>/mass - fail'''
+        received = self.api_query('api.get_mass')
         self.assertTrue(self.expected.data == received.data)
         self.assertTrue(received.status_code == 400)
 
     def test_get_hz_period(self):
-        '''API: Star - test get_hz_period()'''
-        received = Api.get_hz_period(self.code)
+        '''Test /star/<code>/hz_period'''
+        received = self.api_query('api.get_hz_period')
         self.assertTrue(self.expected.data == received.data)
         self.assertTrue(received.status_code == 400)

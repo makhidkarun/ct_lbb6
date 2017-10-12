@@ -64,6 +64,8 @@ class TestPlanetAPIFail(unittest.TestCase):
 
     def test_get_temperature_fail(self):
         '''API: Planet - test get_temperature() - fail'''
-        received = Api.get_temperature(self.uwp)
+        code = 'FD'
+        orbit_no = 3
+        received = Api.get_base_temperature(self.uwp, code, orbit_no)
         self.assertTrue(self.expected.data == received.data)
         self.assertTrue(received.status_code == 400)

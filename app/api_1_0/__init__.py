@@ -4,4 +4,4 @@ from flask import Blueprint
 
 api = Blueprint('api', __name__)
 
-from . import errors, star
+from . import errors, star, orbit, planet
