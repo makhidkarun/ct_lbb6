@@ -26,7 +26,7 @@ class Orbit(object):
 
     def determine_period(self):
         '''Determine orbital period - need orbit radius, stellar mass'''
-        if self.star and self.orbit_no is not None:
+        if self.star.classification and self.orbit_no is not None:
             self.period = round((self.au ** 3 / self.star.mass) ** 0.5, 3)
             LOGGER.debug('period = %s', self.period)
 
@@ -34,7 +34,7 @@ class Orbit(object):
         '''Determine angular diameter of star as seen from this orbit'''
         # a = 2*arctan(Dstellar / (2 * R))
         # Convert from solar dia to Mkm (Dsun = 1.3914 Mkm)
-        if self.star and self.orbit_no is not None:
+        if self.star.classification and self.orbit_no is not None:
             stellar_dia = self.star.radius * 1.3914
             LOGGER.debug('stellar dia = %s Mkm', stellar_dia)
             LOGGER.debug('orbital rad = %s Mkm', self.mkm)
@@ -50,7 +50,7 @@ class Orbit(object):
 
     def get_radius(self, orbit_no):
         '''Get orbit radius from OrbitTable'''
-        if self.star and orbit_no is not None:
+        if self.star.classification and orbit_no is not None:
             details = OrbitTable.query.\
                 filter_by(indx=orbit_no).\
                 first()

@@ -3,32 +3,181 @@
 import unittest
 import logging
 import app.api_1_0.planet as Api
-from flask import jsonify
+from flask import jsonify, url_for
+from app import create_app, db
 
 LOGGER = logging.getLogger(__name__)
 
 
 class TestPlanetAPI(unittest.TestCase):
     '''Planet unit tests'''
+    star_classification = 'G2V'
+    orbit_no = 3
+    planet_uwp = 'A788587-9'
+    api_headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+
+    def setUp(self):
+        '''Setup'''
+        self.app = create_app('testing')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        self.client = self.app.test_client()
+
+    def tearDown(self):
+        '''Teardown'''
+        db.session.remove()
+        self.app_context.pop()
+
     def test_get_uwp(self):
         '''API: Planet - test get_uwp()'''
-        pass
+        response = self.client.get(
+            url_for('api.get_uwp', uwp=self.planet_uwp),
+            content_type='application/json')
+        expected = jsonify({
+            "albedo": {
+                "max": 0.586,
+                "min": 0.293
+            },
+            "cloudiness": 0.6,
+            "trade_classifications": [
+                "Ag",
+                "Ni"
+            ],
+            "uwp": "A788587-9"
+        })
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
+
+    def test_get_uwp_star_orbit(self):
+        '''Test /star/<code>/orbit/<int:orbit_no>/planet/<uwp>'''
+        response = self.client.get(
+            url_for(
+                'api.get_uwp_star',
+                code=self.star_classification,
+                orbit_no=self.orbit_no,
+                uwp=self.planet_uwp),
+            content_type='application/json')
+        expected = jsonify({
+            "albedo": {
+                "max": 0.586,
+                "min": 0.293
+            },
+            "cloudiness": 0.6,
+            "trade_classifications": [
+                "Ag",
+                "Ni"
+            ],
+            "uwp": "A788587-9"
+        })
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
+
+    def test_get_trade_classifi_star(self):
+        '''API: Planet - test get_trade_classifications()'''
+        response = self.client.get(
+            url_for(
+                'api.get_trade_classifications_star',
+                uwp=self.planet_uwp,
+                orbit_no=self.orbit_no,
+                code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({
+            "trade_classifications": [
+                "Ag",
+                "Ni"
+            ],
+        })
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
     def test_get_trade_classifications(self):
         '''API: Planet - test get_trade_classifications()'''
-        pass
+        response = self.client.get(
+            url_for('api.get_trade_classifications', uwp=self.planet_uwp),
+            content_type='application/json')
+        expected = jsonify({
+            "trade_classifications": [
+                "Ag",
+                "Ni"
+            ],
+        })
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
     def test_get_cloudiness(self):
         '''API: Planet - test get_cloudiness()'''
-        pass
+        response = self.client.get(
+            url_for('api.get_cloudiness', uwp=self.planet_uwp),
+            content_type='application/json')
+        expected = jsonify({"cloudiness": 0.6})
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
+
+    def test_get_cloudiness_star(self):
+        '''API: Planet - test get_cloudiness()'''
+        response = self.client.get(
+            url_for(
+                'api.get_cloudiness_star',
+                uwp=self.planet_uwp,
+                orbit_no=self.orbit_no,
+                code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({"cloudiness": 0.6})
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
     def test_get_albedo(self):
         '''API: Planet - test get_albedo()'''
-        pass
+        response = self.client.get(
+            url_for('api.get_albedo', uwp=self.planet_uwp),
+            content_type='application/json')
+        expected = jsonify({
+            "albedo": {
+                "max": 0.586,
+                "min": 0.293
+            }
+        })
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
+
+    def test_get_albedo_star(self):
+        '''API: Planet - test get_albedo()'''
+        response = self.client.get(
+            url_for(
+                'api.get_albedo_star',
+                uwp=self.planet_uwp,
+                orbit_no=self.orbit_no,
+                code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({
+            "albedo": {
+                "max": 0.586,
+                "min": 0.293
+            }
+        })
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
     def test_get_temperature(self):
         '''API: Planet - test get_temperature()'''
-        pass
+        response = self.client.get(
+            url_for(
+                'api.get_base_temperature',
+                uwp=self.planet_uwp,
+                orbit_no=self.orbit_no,
+                code=self.star_classification),
+            content_type='application/json')
+        expected = jsonify({
+            "temperature": {
+                "max": 303.644,
+                "min": 177.806
+            }
+        })
+        self.assertTrue(response.data == expected.data)
+        self.assertTrue(response.status_code == 200)
 
 
 class TestPlanetAPIFail(unittest.TestCase):
