@@ -10,16 +10,23 @@ bootstrap = Bootstrap()
 db = SQLAlchemy()
 
 LOGGER = logging.getLogger(__name__)
-logging.basicConfig(
+'''logging.basicConfig(
     # format='%(asctime)-15s %(name)s %(funcName)s(): %(message)s',
     format='%(relativeCreated)d %(name)s %(funcName)s(): %(message)s',
     level=logging.INFO
-)
+)'''
+STREAMHANDLER = logging.StreamHandler()
+FORMATTER = logging.Formatter(
+    '%(relativeCreated)d %(name)s %(funcName)s(): %(message)s')
+STREAMHANDLER.setFormatter(FORMATTER)
+LOGGER.addHandler(STREAMHANDLER)
+LOGGER.setLevel(logging.INFO)
 
 
 def create_app(config_name):
     '''Create app method'''
     app = Flask(__name__)
+    LOGGER.info('Starting app %s', __name__)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
     bootstrap.init_app(app)

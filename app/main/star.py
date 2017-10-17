@@ -41,7 +41,7 @@ class Star(object):
     def _validate_code_star(self, code):
         '''Validate code for non-dwarf'''
         mtch = re.match(
-            r'([OBAFGKM])([0-9])\s*([IVDab]{1,2}$)',
+            r'([OBAFGKM])([0-9])\s*([IVDab]{1,3}$)',
             code)
         if mtch:
             LOGGER.debug('Code matches RE')

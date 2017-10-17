@@ -1,12 +1,9 @@
 '''star.py'''
 
-import logging
-from flask import jsonify
+from flask import jsonify, current_app
 from . import api
 from . import errors
 from ..main.star import Star
-
-LOGGER = logging.getLogger(__name__)
 
 
 @api.route('/star/<code>')  # code should be of form <typ><decimal><size>
@@ -28,10 +25,10 @@ def get_star(code):
             'mass': star.mass,
             'hz_period': star.hz_period
         }
-        LOGGER.debug('Returning %s', jsonify(star_json).data)
+        current_app.logger.debug('Returning %s', jsonify(star_json).data)
         return jsonify(star_json)
     else:
-        LOGGER.debug('Invalid star %s', code)
+        current_app.logger.debug('Invalid star %s', code)
         return errors.bad_request('Invalid star {}'.format(code))
 
 

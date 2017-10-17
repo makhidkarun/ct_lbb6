@@ -20,6 +20,8 @@ RUN rm /etc/nginx/sites-enabled/default
 COPY docker/flask.conf /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/flask.conf /etc/nginx/sites-enabled/flask.conf
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN ln -sf /dev/stdout /var/log/nginx/access.log
+RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Setup supervisord
 RUN mkdir -p /var/log/supervisor

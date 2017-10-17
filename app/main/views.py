@@ -1,14 +1,11 @@
 '''views'''
 
-import logging
-from flask import render_template
+from flask import render_template, current_app
 from . import main
 from .forms import Lbb6Form
 from .star import Star
 from .orbit import Orbit
 from .planet import Planet
-LOGGER = logging.getLogger(__name__)
-# LOGGER.setLevel(logging.DEBUG)
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -18,19 +15,20 @@ def index():
     orbit = Orbit(star, None)
     planet = Planet(None, orbit, star)
     form = Lbb6Form()
-    LOGGER.debug('star data = %s', form.star.data)
-    LOGGER.debug('orbit data = %s', form.orbit.data)
-    LOGGER.debug('planet data = %s', form.planet.data)
+    current_app.logger.debug('star data = %s', form.star.data)
+    current_app.logger.debug('orbit data = %s', form.orbit.data)
+    current_app.logger.debug('planet data = %s', form.planet.data)
     if form.validate_on_submit():
-        LOGGER.debug('form validated')
+        current_app.logger.debug('form validated')
         star = Star(form.star.data)
         if form.orbit.data is not None:
             orbit = Orbit(star, form.orbit.data)
         if form.planet.data:
             planet = Planet(form.planet.data, orbit=orbit, star=star)
-        LOGGER.debug('star.classification = %s', star.classification)
-        LOGGER.debug('orbit.orbit_no = %s', orbit.orbit_no)
-        LOGGER.debug('planet.uwp = %s', planet.uwp)
+        current_app.logger.debug(
+            'star.classification = %s', star.classification)
+        current_app.logger.debug('orbit.orbit_no = %s', orbit.orbit_no)
+        current_app.logger.debug('planet.uwp = %s', planet.uwp)
     return render_template(
         'index.html',
         star=star,
