@@ -1,0 +1,10 @@
+How to use rsyslogd in a container
+----------------------------------
+
+- Start with supervisord
+    - Use -n option
+    - Use -f option for custom rsyslog.conf
+      OR
+    - Remove /etc/syslog.d/50-default.conf (or rewrite)
+- Send output to stdout (appear in docker console)
+    - *.*   /dev/stdout

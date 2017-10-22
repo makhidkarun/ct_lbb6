@@ -1,0 +1,7 @@
+# .dockerignore
+
+tmp
+venv*
+star.ods
+star.csv
+.git
