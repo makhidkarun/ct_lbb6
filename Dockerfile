@@ -1,18 +1,15 @@
-FROM ubuntu:17.04
-MAINTAINER Daniel Riti <dmriti@gmail.com>
-
-ENV DEBIAN_FRONTEND noninteractive
+FROM alpine:3.5
 
 # Base install
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
-    python3-virtualenv \
+RUN apk update && apk add --no-cache \
+    python \
+    py-pip \
     nginx \
-    gunicorn \
     supervisor \
-    rsyslog\
-    && rm -rf /var/lib/apt/lists/*
+    rsyslog
+
+# Setup gunicorn
+RUN pip install gunicorn
 
 # Setup flask application
 RUN mkdir -p /deploy/app

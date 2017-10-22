@@ -1,0 +1,10 @@
+Alpine Linux image notes
+------------------------
+
+- Packaging
+    - Use apk instead of apt
+
+      apk update &&
+      apk add --no-cache python py-pip nginx rsyslog
+    - Need pip to install gunicorn
+
