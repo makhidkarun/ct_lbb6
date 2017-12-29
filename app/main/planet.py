@@ -3,7 +3,7 @@
 import logging
 import re
 from random import seed, randint
-from ehex.ehex import ehex
+from ehex import ehex
 
 LOGGER = logging.getLogger(__name__)
 # LOGGER.setLevel(logging.ERROR)
