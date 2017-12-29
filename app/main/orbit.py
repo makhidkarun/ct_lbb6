@@ -61,7 +61,7 @@ class Orbit(object):
                 self.au = details.au
                 self.mkm = details.mkm
                 # Tag infeasible orbits
-                if orbit_no <= self.star.min_orbit:
+                if orbit_no < self.star.min_orbit:
                     self.orbit_no = '{0} (orbit too close to star)'.format(
                         orbit_no)
                 if self.star.int_orbit is not None:
